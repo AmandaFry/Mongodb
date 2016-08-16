@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>Mangoose Dashboard</title>
+	<meta name="description" content="Mangoose Dashboard">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+    <!-- <script type ="text/javascript" src="/socket.io/socket.io.js"></script> -->
+<!--     <script type="text/javascript">
+        $(document).ready(function(){
+            // this triggers the connection event in our server!
+             //var socket = io.connect();
+        
+
+            return false;;
+        });
+    </script> -->
+  
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(Mangoose) </span> Mangoose Dashboard</h1>
+            <h3>Edit Animal Page</h3>
+            <div class="descr">
+                <p>Assigment description: Please view on home page.</p>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <div>
+                <form action="/animal/<%= animal._id%>" method="post">
+                <p>Type in the new attribute for the animal:</p>
+                    <div class="row">
+                        <label>
+                            Name: <input type="text" name="name" value="<%= animal.name %>"></input>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            Type: <input type="text" name="type" value="<%= animal.type %>"></input>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            Breed: <input type="text" name="breed" value="<%= animal.breed %>"></input>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            Color: <input type="text" name="color" value="<%= animal.color %>"></input>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            Age: <input type="text" name="age" value="<%= animal.age %>"></input>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <input type="submit" value="Apply changes"></input>
+                    </div>
+                </form>
+            </div>
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>

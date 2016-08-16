@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>TODO: Title goes here</title>
+	<meta name="description" content="TODO: description goes here ">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- <script type ="text/javascript" src="/socket.io/socket.io.js"></script> -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // this triggers the connection event in our server!
+             // var socket = io.connect();
+        
+
+            return false;;
+        });
+    </script>
+  
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(category) </span> TODO: Homework name</h1>
+            <h3>Assigment X - mandatory/optional</h3>
+            <div class="descr">
+                <p>Assigment description:</p>
+                <p>Assigment description:</p>
+                <p>palceholder</p>
+                <ul>
+                    <li>listOne</li>
+                    <li>listTwo</li>
+                    <li>listThree</li>
+                </ul>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <div class="addUser">
+                <p>This show case adding a new entry to mongo db using mangoose: user.save()</p>
+                <form action='/users' method="post">
+                    User: <input name="name"></input>
+                    Age: <input name="age"></input>
+                    <input type="submit" value="Add User"></input>
+                </form>
+            </div>
+            <div class="seeAllUsers">
+                <p>This section show case retriveing all the entry from db. and looping through all of them to put it into a table user.find({})</p>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                    </tr>
+                    <% for (var x in users) { %>
+                    <tr>
+                        <td><%= users[x].name%></td>
+                        <td><%= users[x].age%></td>
+                    </tr>
+                    <% } %>
+                </table>
+            </div>
+            <div class="byName">
+                <p>Search for one record using name User.find({name:'Jessica'})</p>
+            </div>
+            <div class="findOne">
+                <p>This one retrive one record User.findOne({})</p>
+            </div>
+            <div class="updateOne">
+                <p>Update one record User.update({name:'Andrinnna'})</p>
+            </div>
+            <div class="newInstance">
+                <p>Create a new schema (new db) and add a new record.</p>
+            </div>
+            <div class="deleteOne">
+                <p>Delete a single record User.remove({_id: 'insert record unique id here'}). Sample ({_id: ObjectId("5463d871a6a96d5ed6252f4d")}, ...)</p>
+            </div>
+            <div class=deleteAll>
+                <p>Delete all records User.remove({})</p>
+            </div>
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>

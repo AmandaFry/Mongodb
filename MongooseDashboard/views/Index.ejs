@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>Mangoose Dashboard</title>
+	<meta name="description" content="Mangoose Dashboard">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(Mangoose) </span> Mangoose Dashboard</h1>
+            <h3>Assigment - mandatory</h3>
+            <div class="descr">
+                <p>Assigment description:</p>
+                <p>This exercise will allow you to utilize all 4 CRUD methods with Mongoose. In this exercise, you'll build an app which manages a pack of some kind of animal (think otter, rabbit, or owl). You need to be able to add a new animal, update it, and delete it. You should use the following routes to build this app:</p>
+                <ul>
+                    <li>GET '/' Displays all of the mongooses.</li>
+                    <li>GET '/mongooses/:id' Displays information about one mongoose.</li>
+                    <li>GET '/mongooses/new' Displays a form for making a new mongoose.</li>
+                    <li>POST '/mongooses' Should be the action attribute for the form in the above route (GET '/mongooses/new').</li>
+                    <li>GET '/mongooses/:id/edit' Should show a form to edit an existing mongoose.</li>
+                    <li>POST '/mongooses/:id' Should be the action attribute for the form in the above route (GET '/mongooses/:id/edit').</li>
+                    <li>POST '/mongooses/:id/destroy' Should delete the mongoose from the database by ID.</li>
+                </ul>
+                <p>Remember these routes are just examples, avoid using mongooses for your dashboard if you can!</p>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <h1>Welcome to Animal Dashboard using mongoose technology.</h1>
+            <button><a href="/animal/new">Add new animal</a></button>
+                <% for (var x in animals) { %>
+                <div class="list">
+                <ul>
+                    <li><a href="/animal/<%= animals[x]._id %>"><%= animals[x].name %></a></li>
+                    <li><%= animals[x].type %></li>
+                    <li><%= animals[x].breed %></li>
+                    <li><%= animals[x].color %></li>
+                    <li><%= animals[x].age %></li>
+                </ul>
+                <form action="/animal/<%= animals[x]._id %>/destroy" method="post">
+                    <input type="submit" value="Delete"></input>
+                </form>
+                </div>
+                <hr>
+                <% } %>       
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>

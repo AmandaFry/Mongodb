@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>Mangoose Dashboard</title>
+	<meta name="description" content="Mangoose Dashboard">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(Mangoose) </span> Mangoose Dashboard</h1>
+            <h3>Animal Page</h3>
+            <div class="descr">
+                <p>Assigment description: Please view on home page.</p>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <div class="row">
+                <ul>
+                    <li>Name: <%= animal.name %></li>
+                    <li>Type: <%= animal.type %></li>
+                    <li>Breed: <%= animal.breed %></li>
+                    <li>Color: <%= animal.color %></li>
+                    <li>Age: <%= animal.age %></li>
+                </ul>
+                <button><a href="/animal/<%= animal._id %>/edit">Edit</a></button>
+            </div>
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>

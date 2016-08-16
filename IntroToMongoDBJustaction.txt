@@ -1,0 +1,1039 @@
+@@@@ start db
+C:\Program Files\MongoDB\Server\3.2\bin>mongo.exe\
+
+@@@@ show all db
+> show dbs
+dojo         0.000GB
+local        0.000GB
+my_first_db  0.000GB
+starter_db   0.000GB
+
+@@@@ create or switch to db
+> use my_first_db
+switched to db my_first_db
+
+@@@@show tables inside db
+> show collections
+student
+
+@@@@ insert a record
+> db.student.insert({name: "Amanda Fry", home_state: "WA", lucky_number: 7, birthday:{month: 03, day:10, year:1990}})
+WriteResult({ "nInserted" : 1 })
+
+@@@@  find all record SELECT * FROM students
+> db.student.find()
+{ "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"), "name" : "Amanda Fry", "home_state" : "WA", "lucky_number" : 7, "birthday" : { "month" : 3, "day" : 10, "year" : 1990 } }
+
+@@@@ find greater than and show nicelly
+> db.student.find({lucky_number:{$gt: 3}}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+}
+
+@@@@@ find less or equal than
+> db.student.find({lucky_number:{$lte: 10}}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+}
+
+@@@@@ find between (range of numbers) officant way
+> db.student.find({lucky_number:{$in: (3,10)}}).pretty()
+Error: error: {
+        "waitedMS" : NumberLong(0),
+        "ok" : 0,
+        "errmsg" : "$in needs an array",
+        "code" : 2
+}
+@@@@ same as above not officant way, first attempt
+> db.student.find({lucky_number:{$in: [3,4,5,6,7,8,9,10]}}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+
+@@@@ update all records {multi:true} - make sure ues $set so it will keep current records
+> db.student.update({}, {$set: {interests: ['coding', 'brunch', 'MongoDB']}},{multi:true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+
+@@@@ update one record $set , keep current records an modify or add value to current key
+> db.student.update({home_state: "NY"}, {$set: {interests: ['sleeping', 'reading']}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+@@@@ update $push add new key and value to the object
+> db.student.update({home_state: "CA"}, {$push: {interests:['dining out']}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+@@@@ update $pop 
+> db.student.update({name: "Brianna Fry"}, {$pop: {array_key: (1)}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+> db.student.find({}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB"
+        ]
+}
+{
+        "_id" : ObjectId("570c25962d71f14fb7fdfe2d"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "taxes"
+        ]
+}
+{
+        "_id" : ObjectId("570c29312d71f14fb7fdfe2e"),
+        "name" : "Jane Doe",
+        "home_state" : "CA",
+        "lucky_number" : 13,
+        "birthday" : {
+                "month" : 2,
+                "day" : 5,
+                "year" : 1965
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                [
+                        "dining out"
+                ],
+                "dining out"
+        ]
+}
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+> db.student.update({name: "Brianna Fry"}, {$pop: {array_key: 1}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+> db.student.update({name: "Brianna Fry"}, {$pop: {interests: 1}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.student.find({}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB"
+        ]
+}
+{
+        "_id" : ObjectId("570c25962d71f14fb7fdfe2d"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB"
+        ]
+}
+{
+        "_id" : ObjectId("570c29312d71f14fb7fdfe2e"),
+        "name" : "Jane Doe",
+        "home_state" : "CA",
+        "lucky_number" : 13,
+        "birthday" : {
+                "month" : 2,
+                "day" : 5,
+                "year" : 1965
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                [
+                        "dining out"
+                ],
+                "dining out"
+        ]
+}
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+> db.student.remove({home_state: "CA"}, 1)
+WriteResult({ "nRemoved" : 1 })
+> db.student.find({}).pretty()
+{
+        "_id" : ObjectId("570c255a2d71f14fb7fdfe2c"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB"
+        ]
+}
+{
+        "_id" : ObjectId("570c25962d71f14fb7fdfe2d"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB"
+        ]
+}
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+> db.student.remove({home_state: "WA"})
+WriteResult({ "nRemoved" : 2 })
+> db.student.find({}).pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+> db.student.insert({name: "Tom Smith", home_state: "CA", lucky_number: 25, birthday:{month: 11, day:23, year:1985}})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({name: "Amanda Fry", home_state: "WA", lucky_number: 7, birthday:{month: 03, day:10, year:1990}})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({name: "Brianna Fry", home_state: "WA", lucky_number: 7, birthday:{month: 04, day:5, year:2013}})
+WriteResult({ "nInserted" : 1 })
+> db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        }
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        }
+}
+> db.student.insert({name: "Bagheera Fry", home_state: "WA", lucky_number: 50, birthday:{month: 05, day:15, year:2012}})
+WriteResult({ "nInserted" : 1 })
+> db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        }
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        }
+}
+{
+        "_id" : ObjectId("570c3ca12d71f14fb7fdfe34"),
+        "name" : "Bagheera Fry",
+        "home_state" : "WA",
+        "lucky_number" : 50,
+        "birthday" : {
+                "month" : 5,
+                "day" : 15,
+                "year" : 2012
+        }
+}
+> db.student.find({luck_number: {$gt:49}})
+> db.student.find({lucky_number: {$gt:49}})
+{ "_id" : ObjectId("570c3ca12d71f14fb7fdfe34"), "name" : "Bagheera Fry", "home_state" : "WA", "lucky_number" : 50, "birthday" : { "month" : 5, "day" : 15, "year" : 2012 } }
+> db.student.remove({lucky_number: {$gt:49}})
+WriteResult({ "nRemoved" : 1 })
+> db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ]
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ]
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        }
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        }
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        }
+}
+>db.student.update({}, {$set: {number_of_belts: 0}},{multi:true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+> db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ],
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "number_of_belts" : 0
+}
+>db.student.find({home_state: "WA"})
+{ "_id" : ObjectId("570c3c252d71f14fb7fdfe32"), "name" : "Amanda Fry", "home_state" : "WA", "lucky_number" : 7, "birthday" : { "month" : 3, "day" : 10, "year" : 1990 }, "number_of_belts" : 0 }
+{ "_id" : ObjectId("570c3c292d71f14fb7fdfe33"), "name" : "Brianna Fry", "home_state" : "WA", "lucky_number" : 7, "birthday" : { "month" : 4, "day" : 5, "year" : 2013 }, "number_of_belts" : 0 }
+
+
+db.student.update({home_state:"WA"}, {$set: {number_of_belts:1}},{multi:true})
+WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
+ db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ],
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "number_of_belts" : 1
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "number_of_belts" : 1
+}
+>
+db.student.find({lucky_number: {$gte:1, $lte:10}}).pretty()
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "number_of_belts" : 0
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "number_of_belts" : 0
+}
+>
+db.student.update({}, {$rename: {"number_of_belts" : "belts_earned"}}, {multi:true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+ db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ],
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "lucky_number" : 3,
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "lucky_number" : 25,
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "belts_earned" : 1
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "belts_earned" : 1
+}
+>
+db.student.update({},{$unset: {lucky_number: ""}}, {multi:true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ],
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "belts_earned" : 0
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "belts_earned" : 1
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "belts_earned" : 1
+}
+>db.student.update({}, {$currentDate: {updated_on: {$type: "date"}}},{multi:true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+> db.student.find().pretty()
+{
+        "_id" : ObjectId("570c297d2d71f14fb7fdfe2f"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "skiing"
+        ],
+        "belts_earned" : 0,
+        "updated_on" : ISODate("2016-04-12T02:02:49.555Z")
+}
+{
+        "_id" : ObjectId("570c29bd2d71f14fb7fdfe30"),
+        "name" : "Chloe Cat",
+        "home_state" : "NY",
+        "birthday" : {
+                "month" : 8,
+                "day" : 15,
+                "year" : 2005
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongodDB",
+                "sleeping",
+                "reading"
+        ],
+        "belts_earned" : 0,
+        "updated_on" : ISODate("2016-04-12T02:02:49.555Z")
+}
+{
+        "_id" : ObjectId("570c3c0a2d71f14fb7fdfe31"),
+        "name" : "Tom Smith",
+        "home_state" : "CA",
+        "birthday" : {
+                "month" : 11,
+                "day" : 23,
+                "year" : 1985
+        },
+        "belts_earned" : 0,
+        "updated_on" : ISODate("2016-04-12T02:02:49.555Z")
+}
+{
+        "_id" : ObjectId("570c3c252d71f14fb7fdfe32"),
+        "name" : "Amanda Fry",
+        "home_state" : "WA",
+        "birthday" : {
+                "month" : 3,
+                "day" : 10,
+                "year" : 1990
+        },
+        "belts_earned" : 1,
+        "updated_on" : ISODate("2016-04-12T02:02:49.555Z")
+}
+{
+        "_id" : ObjectId("570c3c292d71f14fb7fdfe33"),
+        "name" : "Brianna Fry",
+        "home_state" : "WA",
+        "birthday" : {
+                "month" : 4,
+                "day" : 5,
+                "year" : 2013
+        },
+        "belts_earned" : 1,
+        "updated_on" : ISODate("2016-04-12T02:02:49.555Z")
+}
+>

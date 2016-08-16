@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>Quoting Dojo Redux</title>
+	<meta name="description" content="Quoting Dojo Redux">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- <script type ="text/javascript" src="/socket.io/socket.io.js"></script> -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // this triggers the connection event in our server!
+             // var socket = io.connect();
+        
+
+            return false;;
+        });
+    </script>
+  
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(Mangoose) </span> Quoting Dojo Redux</h1>
+            <h3>Assigment - mandatory</h3>
+            <div class="descr">
+                <p>Assigment description:</p>
+                <p>Application that allows users to add quotes to a database and display them on a separate page.</p>
+                <ul>
+                    <li>The 'add my quote' button should add the user's quote to the database.</li>
+                    <li>The 'skip to quotes' button should take the user directly to the main page.</li>
+                    <li>Use the following URLs:</li>
+                    <li>GET ' / '  where you enter the name and the quote</li>
+                    <li>POST '/quotes' for the method of the form to make a new quote.</li>
+                    <li>GET '/quotes' for the screen where all the quotes are rendered.</li>
+                    <li>Don't use session in this assignment</li>
+                    <li>If there are errors in the .save() method, you should render a view and pass errors to that view instead of redirecting. That way we won't lose our data and thereby not need to use a session variable!</li>
+                </ul>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <div>
+                <h1>Welcome to Quoting Dojo</h1>
+                <form action='/quote' method='post'>
+                    <div class="row">
+                        <label>
+                            Your name: <input class="row" name="name"></input></br>
+                        </label>
+                        <label>
+                            Your quote: <textarea name="quote"></textarea>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <input type="submit" value="Add my quote!"></input>
+                    </div>
+                </form>
+                <form action='/quotes' method="get">
+                    <div class="row">
+                        <input type="submit" value="Skip to Quotes!"></input>
+                    </div>
+                </form>
+            </div>
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>

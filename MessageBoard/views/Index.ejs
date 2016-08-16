@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <meta charset="UTF-8">
+	<title>Message board</title>
+	<meta name="description" content="Message board">
+	<link rel="stylesheet" type="text/css" href="/AmandaTemplate.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- <script type ="text/javascript" src="/socket.io/socket.io.js"></script> -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // this triggers the connection event in our server!
+             // var socket = io.connect();
+        
+
+            return false;;
+        });
+    </script>
+  
+</head>
+<body>	
+    <div class="container">
+        <div class="header">
+            <h1><span>(Mangoose) </span> Message Board</h1>
+            <h3>Assigment - mandatory</h3>
+            <div class="descr">
+                <p>Assigment description:</p>
+                <p>Create a simple single page message board that allows users to create messages, and comment on existing messages</p>
+            </div>
+        </div><!-- end of header content-->
+        <div class="maincontent">
+            <div>
+                <div class="top_row">
+                    <h1>The Dojo Message Board.</h1>
+                </div>
+                <form action="/create_message" method="post">
+                    <label>
+                        Name: <input name="name"></input>
+                    </label>
+                    <div class="message">
+                        <p>Message:</p> 
+                        <textarea name="message"></textarea>
+                    </div>
+                    <button class="buttons">Post a message</button>
+                    <!-- <input type="submit" align="right" value="Post a message!"></input> -->
+                </form>
+                <div class="messages">
+                    <h4>Name: Joe</h4>
+                    <h4>Message: the name of the message</h4>
+                    <div class="comments">
+                        <h5>Name: Kris</h5>
+                        <h5>Comment: I agree</h5>
+                    </div>
+                    <form action="create_comment" method="post">
+                        <label>
+                            Name: <input name="name"></input>
+                        </label>
+                        <div class="comments">
+                            <p>Comment:</p>
+                            <textarea name="comment"></textarea>
+                        </div>
+                        <button class="buttons">Post a comment</button>
+                    </form>
+                </div>
+            </div>
+        </div><!-- end of main content-->
+        <div class="footer">
+            <p>created by: Amanda Fry</p>
+            <a class="footerSpace" href="mailto:FeAmandaF@hotmail.com">FeAmandaF@hotmial.com</a>
+            <a href="https://www.linkedin.com/in/amandafry1">Amanda's LikedIn profile</a>
+        </div><!-- end of footer -->
+      </div><!-- end of container -->
+</body>
+</html>
